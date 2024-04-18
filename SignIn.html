@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign In</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image:url(img1.jpg);
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    color:white;
+}
+.container {
+    max-width: 400px;
+    margin: 250px;
+    margin-left: 200px;
+    border-radius: 5px;
+    padding: 125px;
+    background-color: rgba(247, 245, 250, 0.737);
+}
+
+.sign-in-form {
+    font-family: "Times New Roman", Times, serif;
+}
+
+.sign-in-form h2 {
+    margin-bottom: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 415px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #01101d;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2730db;
+}
+
+.message {
+    margin-top: 20px;
+    color: black;
+}
+
+.message a {
+    color:black;
+    text-decoration: none;
+}
+
+.message a:hover {
+    text-decoration: underline;
+}
+input{
+  background-color: #01101d;
+  padding: 30px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+input::placeholder {
+  color:white;
+}
+h1{
+    color: black;
+}
+label{
+    color: black;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <form class="sign-in-form" id="sign-in-form">
+            <h1>Sign In</h1>
+            <div class="input-group">
+                <label for="Username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="Password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit">Sign In</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+        </form>
+    </div>
+    <script>
+        document.getElementById("sign-in-form").addEventListener("submit",function(event) 
+        {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        
+        if (username.length < 4 || username.length > 20 ||
+        !/^[a-zA-Z0-9]+$/.test(username)) 
+        {
+        alert("Username must be between 6 and 15 characters long and can only contain alphanumeric characters.");
+        event.preventDefault(); 
+        return;
+        }
+        if (password.length < 6 || password.length > 20 ||
+        !/^[a-zA-Z0-9]+$/.test(password)) 
+        {
+        alert("Password must be between 6 and 20 characters long and can only contain alphanumeric characters.");
+        event.preventDefault();
+        return;
+        }
+        window.location.replace("C:\Users\jacob\html\sample\src\App.js");
+        });
+    </script>
+</body>
+</html>
