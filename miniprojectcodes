@@ -1,0 +1,437 @@
+SIGN IN PAGE CODE:
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign In</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image:url(img1.jpg);
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    color:white;
+}
+.container {
+    max-width: 400px;
+    margin: 250px;
+    margin-left: 200px;
+    border-radius: 5px;
+    padding: 125px;
+    background-color: rgba(247, 245, 250, 0.737);
+}
+
+.sign-in-form {
+    font-family: "Times New Roman", Times, serif;
+}
+
+.sign-in-form h2 {
+    margin-bottom: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 415px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #01101d;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2730db;
+}
+
+.message {
+    margin-top: 20px;
+    color: black;
+}
+
+.message a {
+    color:black;
+    text-decoration: none;
+}
+
+.message a:hover {
+    text-decoration: underline;
+}
+input{
+  background-color: #01101d;
+  padding: 30px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+input::placeholder {
+  color:white;
+}
+h1{
+    color: black;
+}
+label{
+    color: black;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <form class="sign-in-form" id="sign-in-form">
+            <h1>Sign In</h1>
+            <div class="input-group">
+                <label for="Username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="Password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit">Sign In</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+        </form>
+    </div>
+    <script>
+        document.getElementById("sign-in-form").addEventListener("submit",function(event) 
+        {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        
+        if (username.length < 4 || username.length > 20 ||
+        !/^[a-zA-Z0-9]+$/.test(username)) 
+        {
+        alert("Username must be between 6 and 15 characters long and can only contain alphanumeric characters.");
+        event.preventDefault(); 
+        return;
+        }
+        if (password.length < 6 || password.length > 20 ||
+        !/^[a-zA-Z0-9]+$/.test(password)) 
+        {
+        alert("Password must be between 6 and 20 characters long and can only contain alphanumeric characters.");
+        event.preventDefault();
+        return;
+        }
+        window.location.replace("C:\Users\jacob\html\sample\src\App.js");
+        });
+    </script>
+</body>
+</html>
+APP JAVASCRIPT CODE:
+//App.js
+import React, { useState, useEffect } from 'react';
+import './App.css';
+
+function App() {
+  const [tasks, setTasks] = useState([]);
+  const [taskText, setTaskText] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [totalTasks, setTotalTasks] = useState(0);
+
+  const validateTime = time => {
+    const regex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+    return regex.test(time);
+  };
+
+  const findUnusedTime = () => {
+    const unusedTimeSlots = [];
+    for (let i = 0; i < tasks.length - 1; i++) {
+      const endTime = tasks[i].endTime;
+      const nextStartTime = tasks[i + 1].startTime;
+      if (endTime !== nextStartTime) {
+        unusedTimeSlots.push({ startTime: endTime, endTime: nextStartTime });
+      }
+    }
+    return unusedTimeSlots;
+  };
+
+  const findNextFreeTime = () => {
+    for (let i = 0; i < tasks.length; i++) {
+      if (!tasks[i].completed) {
+        const endTime = tasks[i].endTime;
+        const nextStartTime = tasks[i + 1] ? tasks[i + 1].startTime : '23:59';
+        if (endTime !== nextStartTime) {
+          return { startTime: endTime, endTime: nextStartTime };
+        }
+      }
+    }
+    return null;
+  };
+
+  const handleAddTask = () => {
+    if (
+      taskText.trim() === '' ||
+      !startDate ||
+      !startTime ||
+      !endTime ||
+      !validateTime(startTime) ||
+      !validateTime(endTime)
+    ) {
+      alert('Please enter valid task details.');
+      return;
+    }
+  
+    const startDateTime = new Date(`${startDate} ${startTime}`);
+    const endDateTime = new Date(`${startDate} ${endTime}`);
+  
+    if (startDateTime >= endDateTime) {
+      alert('Start time must be before the end time.');
+      return;
+    }
+  
+    const newTask = {
+      task: taskText,
+      startTime: `${startDate} ${startTime}`,
+      endTime: `${startDate} ${endTime}`,
+      completed: false
+    };
+  
+    setTasks([...tasks, newTask]);
+    setTaskText('');
+    setStartDate('');
+    setStartTime('');
+    setEndTime('');
+    setTotalTasks(totalTasks + 1);
+  };
+
+  const handleDeleteTask = index => {
+    const updatedTasks = [...tasks];
+    if (updatedTasks[index].completed) {
+      setCompletedTasks(completedTasks - 1);
+    }
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
+    setTotalTasks(totalTasks - 1);
+  };
+
+  const handleTaskCompletion = index => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].completed = !updatedTasks[index].completed;
+    setTasks(updatedTasks);
+    if (updatedTasks[index].completed) {
+      setCompletedTasks(completedTasks + 1);
+    } else {
+      setCompletedTasks(completedTasks - 1);
+    }
+  };
+
+  useEffect(() => {
+    const timerID = setInterval(() => {
+      setCurrentTime(new Date());
+      tasks.forEach(task => {
+        const startTime = new Date(task.startTime);
+        const endTime = new Date(task.endTime);
+        if (
+          startTime <= currentTime && endTime > currentTime &&
+          !task.completed && !task.alertedStart
+        ) {
+          alert(`Task "${task.task}" is starting now!`);
+          task.alertedStart = true;
+        }
+      });
+      tasks.forEach(task => {
+        const endTime = new Date(task.endTime);
+        if (endTime <= currentTime && !task.completed && !task.alertedEnd) {
+          alert(`Task "${task.task}" has ended!`);
+          task.alertedEnd = true;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(timerID);
+  }, [tasks, currentTime]);
+
+  tasks.forEach(task => {
+    if (!validateTime(task.startTime) || !validateTime(task.endTime)) {
+      console.error(`Invalid time format for task: ${task.task}`);
+    }
+  });
+
+  const unusedTimeSlots = findUnusedTime();
+  const nextFreeTimeSlot = findNextFreeTime();
+
+  const calculateProductivity = () => {
+    if (totalTasks === 0) return 0; // Prevent division by zero
+    const productivity = (completedTasks / totalTasks) * 100;
+    return productivity;
+  };
+
+  const getProductivityLevel = () => {
+    const productivity = calculateProductivity();
+    if (productivity >= 80) {
+      return "Good";
+    } else if (productivity >= 50 && productivity < 80) {
+      return "Average";
+    } else {
+      return "Bad";
+    }
+  };
+
+  return (
+    <div className="App">
+      <h1>To-Do List</h1>
+      <div className="input-container">
+        <input
+          type="text"
+          placeholder="Enter task"
+          value={taskText}
+          onChange={e => setTaskText(e.target.value)}
+        />
+        <label htmlFor="start-date">Date:</label>
+        <input
+          type="date"
+          id="start-date"
+          value={startDate}
+          onChange={e => setStartDate(e.target.value)}
+        />
+        <label htmlFor="start-time">Start Time:</label>
+        <input
+          type="time"
+          id="start-time"
+          value={startTime}
+          onChange={e => setStartTime(e.target.value)}
+        />
+        <label htmlFor="end-time">End Time:</label>
+        <input
+          type="time"
+          id="end-time"
+          value={endTime}
+          onChange={e => setEndTime(e.target.value)}
+        />
+        <button onClick={handleAddTask}>Add Task</button>
+      </div>
+      <div>
+        <h2>Current Time: {currentTime.toLocaleString()}</h2>
+        <p>Tasks Added: {totalTasks}</p>
+        <p>Tasks Completed: {completedTasks}</p>
+        <div>
+          <h2>Productivity</h2>
+          <p>Productivity: {calculateProductivity().toFixed(2)}%</p>
+          <p>Productivity Level: {getProductivityLevel()}</p>
+        </div>
+        <h2>Unused Time Slots</h2>
+        <ul>
+          {unusedTimeSlots.map((slot, index) => (
+            <div className="card" key={index}>
+              <p>Start Time: {slot.startTime}</p>
+              <p>End Time: {slot.endTime}</p>
+            </div>
+          ))}
+        </ul>
+        <h2>Next Possible Free Time Slot</h2>
+        {nextFreeTimeSlot ? (
+          <div className="card">
+            <p>{nextFreeTimeSlot.startTime} - {nextFreeTimeSlot.endTime}</p>
+          </div>
+        ) : (
+          <p></p>
+        )}
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Completed</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map((task, index) => (
+            <tr key={index}>
+              <td>{task.task}</td>
+              <td>{task.startTime}</td>
+              <td>{task.endTime}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => handleTaskCompletion(index)}
+                />
+              </td>
+              <td>
+                <button onClick={() => handleDeleteTask(index)}>Delete</button>
+                <button onClick={() => handleTaskCompletion(index)}>
+                  {task.completed ? "Undo" : "Done"}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default App;
+
+/* App.css */
+.App {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  
+  
+  input[type='text'] {
+    margin-right: 10px;
+  }
+  
+  .input-container {
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  button {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+
+
+
